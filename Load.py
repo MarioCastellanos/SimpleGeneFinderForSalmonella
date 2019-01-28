@@ -1,6 +1,6 @@
 """
 @AUTHOR : MARIO CASTELLANOS
-@VERSION : 00.00.01
+@VERSION : 01.00.02
 @DATE : 01/26/19
 
 DESCRIPTION :  The function in this file is intended to open a file skip the first line

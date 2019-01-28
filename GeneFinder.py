@@ -1,6 +1,16 @@
 from dna import *
 from Load import *
 
+"""
+@AUTHOR : MARIO CASTELLANOS
+@VERSION : 01.00.02
+@DATE : 01/28/19
+
+DESCRIPTION : The purpose of this file is to be useed as the driver for Load.py and dna.py
+    FUNCTIONS: oneFrame(DNA) 
+"""
+
+
 '''
 NAME : codingStrandToAA
 PARAMETERS : string representing dna nucleotide sequence 

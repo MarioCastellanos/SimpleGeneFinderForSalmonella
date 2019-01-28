@@ -1,13 +1,13 @@
-'''
+"""
 @AUTHOR : MARIO CASTELLANOS
-@VERSION : 00.00.01
+@VERSION : 01.00.02
 @DATE : 01/26/19
 
 DESCRIPTION : The functions found in this file are used
               to manipulate DNA.
     FUNCTIONS: reverseComplement
                codingStrandToAA
-'''
+"""
 
 
 
