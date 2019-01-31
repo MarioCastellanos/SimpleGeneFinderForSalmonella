@@ -51,28 +51,23 @@ def oneFrame(DNA):
 """
 NAME: oneFrameV2
 PARAMETERS : @param DNA :a string representing a DNA sequence
-FUCNTION : 
+FUCNTION : parses through the possible ORF in A
 OUTPUT : 
 TIME_COMPLEXITY : 
 """
 def oneFrameV2(DNA):
-    ORFL = oneFrame(DNA) # Open reading frame list
-    for frame in range(0, len(ORFL)-1, 1): # n33d to check if n3st3d
-        curr_frame = ORFL[frame]
-        next_frame = ORFL[frame+1]
-        curr_frame_count = frame
-        while curr_frame_count < len(ORFL):
-            if len(curr_frame) > len(next_frame):
-
-            curr_frame_count += 1
-
-
-
-
-
-
-
-
+    ORFL = oneFrame(DNA)  # Open reading frame list
+    #print(ORFL)
+    for index in range(0,len(ORFL),3):
+        curr_Frame = ORFL[index][3:]
+        for i in range(0,len(curr_Frame),3):
+            #print("curr_frame: ", curr_Frame[i:i + 3])
+            if curr_Frame[i:i+3] == "ATG":
+                print("curr_frame: ", curr_Frame[i:i+3])
+                print("len: ",len(ORFL))
+                print("index: ",index+1,)
+                ORFL.pop(index+1)
+    return ORFL
 
 
 def main():
@@ -81,10 +76,11 @@ def main():
     dna_seq1 = "CCATGTAGAAATGCCC"
     dna_seq2 = "ATGCCCATGGGGAAATTTTGACCC"
 
-    oneFrame(dna_seq)
-    oneFrame(dna_seq1)
-    oneFrame(dna_seq2)
+    ###neFrame(dna_seq2)
 
-    oneFrameV2(dna_seq)
+    print(oneFrameV2("ATGCCCATGGGGAAATTTTGACCC"))
+    print(oneFrameV2("ATGATGTTTAAAATGAAAAAATTT"))
+
+
 
 main()
