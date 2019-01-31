@@ -1,5 +1,5 @@
 from dna import *
-from Load import *
+import Load
 
 """
 @AUTHOR : MARIO CASTELLANOS
@@ -82,8 +82,23 @@ def oneFrameV2(DNA):
     return ORFL
 
 def longestORF(DNA):
+    max_len = 0
+    max_frame = ""
     for i in range(0,3,1):
-        print(DNA[i:])
+        curr_ORFL = oneFrameV2(DNA[i:])
+        for frame in curr_ORFL :
+            if len(frame) > max_len:
+                max_frame = frame
+    return max_frame
+
+def longestORFBothStrands(DNA):
+    dna = longestORF(DNA)
+    complement_dna = longestORF(reverseComplement(DNA))
+    if len(dna) > len(complement_dna):
+        return dna
+    return complement_dna
+
+def longestORFNoncoding(DNA, numReps):
 
 
 
@@ -94,11 +109,12 @@ def main():
     dna_seq2 = "ATGCCCATGGGGAAATTTTGACCC"
     dna_seq3 = "ATGCCCATGGGGAAATTTTGACCC" #print("ONEV2: ", oneFrameV2("ATGCCCATGGGGAAATTTTGACCC"))
     dna_seq4 = "ATGATGTAGAAAATGAAAAAATTT" #print("ONEV22: ", oneFrameV2("ATGATGTAGAAAATGAAAAAATTT"))
+    dna_seq5 = "ATGAAATAG"
+    dna_seq6 = "CATGAATAGGCCCA"
+    dna_seq7 = "ATGCCCTAACATGAAAATGACTTAGG"
+    dna_seq8 = "CTATTTCATG"
 
 
-
-
-
-
+    print(longestORFBothStrands(dna_seq8))
 
 main()

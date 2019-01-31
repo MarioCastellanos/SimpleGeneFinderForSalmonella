@@ -20,7 +20,7 @@ TIME COMPLEXITY : theta(n) where n is the size of the dna_seq
 '''
 
 
-def reverseComplement (dna_seq):
+def reverseComplement(dna_seq):
 
     invese_len = (len(dna_seq)+1)*-1
     inverse_dna_seq_comp = ""
