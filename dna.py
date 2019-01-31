@@ -1,7 +1,7 @@
 """
 @AUTHOR : MARIO CASTELLANOS
-@VERSION : 01.00.02
-@DATE : 01/26/19
+@VERSION : 01.00.04
+@DATE : 01/31/19
 
 DESCRIPTION : The functions found in this file are used
               to manipulate DNA.
@@ -42,7 +42,9 @@ def reverseComplement (dna_seq):
 '''
 NAME : codingStrandToAA
 PARAMETERS : string representing dna nucleotide sequence 
-FUNCTION : takes a dna sequence and generates the appropriate Amino acid Sequence  
+FUNCTION : takes a dna sequence and generates the appropriate Amino acid Sequence 
+           using an arrangement of if else statements to determine the proper amino acid
+           for each codon. 
 RETURN :  String representing the corresponding amino acids 
 TIME COMPLEXITY : theta(n) where n is the size of the dna_seq
 '''
