@@ -1,4 +1,7 @@
 from dna import *
+from Load import *
+from random import*
+
 import Load
 
 """
@@ -74,12 +77,29 @@ comment : I believe that there is a faster way to implement without calling
 
 def oneFrameV2(DNA):
     ORFL = oneFrame(DNA)  # Open reading frame list
-    for index in range(0,len(ORFL),3):
+    # TODO: Need to change to while loop configuration to fix bug
+    orfllen = len(ORFL)
+    index = 0
+    for index in range(0,orfllen-1,3):
+        print("index: ", index)
+        print("len: ", len(ORFL[index]))
+        print("ORFLSIZE: ", len(ORFL))
+        orfllen = len(ORFL)
         curr_Frame = ORFL[index][3:]
         for i in range(0,len(curr_Frame),3):
             if curr_Frame[i:i+3] == "ATG":
                 ORFL.pop(index+1)
     return ORFL
+
+
+"""
+NAME: longestORF
+PARAMETERS: @param DNA :a string representing a DNA sequence
+FUNCTION: function which calls oneFrameV2.to find the longest
+          open reading frame of all 3 reading frames
+OUTPUT: string representing the longest open reading frame
+"""
+
 
 def longestORF(DNA):
     max_len = 0
@@ -91,6 +111,18 @@ def longestORF(DNA):
                 max_frame = frame
     return max_frame
 
+
+"""
+NAME: longestORFBothStrands
+PARAMETERS: @param DNA :a string representing a DNA sequence
+FUNCTION: This function takes a DNA string as input and finds
+          the longest ORF on that DNA string and its reverse
+          complement.
+OUTPUT: return a string representing the longest ORF of the 
+        DNA string and its reverse complement
+"""
+
+
 def longestORFBothStrands(DNA):
     dna = longestORF(DNA)
     complement_dna = longestORF(reverseComplement(DNA))
@@ -98,8 +130,50 @@ def longestORFBothStrands(DNA):
         return dna
     return complement_dna
 
-def longestORFNoncoding(DNA, numReps):
 
+
+
+"""
+NAME: 
+PARAMETERS: 
+FUNCTION: 
+OUTPUT: 
+"""
+
+
+def longestORFNoncoding(DNA, numReps):
+    dna_seq_list = list(DNA)
+    max_random = 0
+    for i in range (0,numReps,1):
+        shuffle(dna_seq_list)
+        curr_random = longestORFBothStrands(collapse(dna_seq_list))
+        if len(curr_random) > max_random:
+            max_random = len(curr_random)
+    return max_random
+
+
+
+"""
+NAME: 
+PARAMETERS: 
+FUNCTION: 
+OUTPUT: 
+"""
+
+
+def collapse(L):
+    str = ""
+    for char in L:
+        str+=char
+    return str
+
+
+"""
+NAME: 
+PARAMETERS: 
+FUNCTION: 
+OUTPUT: 
+"""
 
 
 def main():
@@ -113,8 +187,8 @@ def main():
     dna_seq6 = "CATGAATAGGCCCA"
     dna_seq7 = "ATGCCCTAACATGAAAATGACTTAGG"
     dna_seq8 = "CTATTTCATG"
+    X73525 = loadSeq("X73525.fa")
 
-
-    print(longestORFBothStrands(dna_seq8))
+    print(longestORFNoncoding(X73525, 50))
 
 main()
