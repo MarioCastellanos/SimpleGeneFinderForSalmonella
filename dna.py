@@ -68,12 +68,12 @@ def codingStrandToAA(DNA):
                     if curr_codon[2] == "T" or curr_codon[2] == "C":
                         AASEQ += "Y"
                     else:
-                        AASEQ += "STOPCODON"
+                        AASEQ += ""
                 else:
                     if curr_codon[2] == "T" or curr_codon[2] == "C":
                         AASEQ += "C"
                     elif curr_codon[2] == "A":
-                        AASEQ += "STOPCODON"
+                        AASEQ += ""
                     else :
                         AASEQ +="W"
             elif curr_codon [0] == "C":

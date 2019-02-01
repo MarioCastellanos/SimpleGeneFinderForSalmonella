@@ -2,7 +2,6 @@ from dna import *
 from Load import *
 from random import*
 
-import Load
 
 """
 @AUTHOR : MARIO CASTELLANOS
@@ -66,31 +65,25 @@ FUCNTION : starts at the 0 position of DNA and searches forward
            frames list. If any nested frames are found only the larger reading
            frame is added to the list. 
 OUTPUT :  the list of all ORFs found that are not nested 
-comment : I believe that there is a faster way to implement without calling 
-           calling one frame by processing the DNA and not adding the nested
-           reading frames instead of processing the list of reading frames 
-           with nested frames. I believe it to be faster as the  DNA 
-           sequence would only be processed once without the additional burden 
-           of list manipulation. 
 """
 
 
 def oneFrameV2(DNA):
-    ORFL = oneFrame(DNA)  # Open reading frame list
-    # TODO: Need to change to while loop configuration to fix bug
-    orfllen = len(ORFL)
-    index = 0
-    for index in range(0,orfllen-1,3):
-        print("index: ", index)
-        print("len: ", len(ORFL[index]))
-        print("ORFLSIZE: ", len(ORFL))
-        orfllen = len(ORFL)
-        curr_Frame = ORFL[index][3:]
-        for i in range(0,len(curr_Frame),3):
-            if curr_Frame[i:i+3] == "ATG":
-                ORFL.pop(index+1)
-    return ORFL
-
+    ORFLNN = []  # Open Reading Frame List Non Nested Reading frames
+    ENDLIST = []
+    for i in range(0,len(DNA),3):
+        curr_codon = DNA[i:i+3]
+        if curr_codon == "ATG":
+            curr_Frame = ""
+            loc = i
+            while loc< len(DNA) and curr_codon!= "TAG" and curr_codon != "TGA" and curr_codon != "TAA" :
+                curr_Frame += DNA[loc:loc+3]
+                curr_codon = DNA[loc:loc+3]
+                loc+=3
+            if loc not in ENDLIST:
+                ORFLNN.append(curr_Frame)
+                ENDLIST.append(loc)
+    return ORFLNN
 
 """
 NAME: longestORF
@@ -134,10 +127,13 @@ def longestORFBothStrands(DNA):
 
 
 """
-NAME: 
-PARAMETERS: 
-FUNCTION: 
-OUTPUT: 
+NAME: longestORFNoncoding 
+PARAMETERS  :param DNA :a string representing a DNA sequence
+            :param numReps is an integer that represents the amount of 
+             garbage sequences to generate 
+FUNCTION:  generates a bunch of garabage sequences used so we can cross reference 
+           with our ORF to assess whether long ORFs are genes. 
+OUTPUT:   returns an number reperesenting the lenght of the longest garbage ORF it found 
 """
 
 
@@ -154,10 +150,10 @@ def longestORFNoncoding(DNA, numReps):
 
 
 """
-NAME: 
-PARAMETERS: 
-FUNCTION: 
-OUTPUT: 
+NAME: collapse
+PARAMETERS :parameter L a list of characters to join together 
+FUNCTION: concatenates all characters in L to a single string 
+OUTPUT: single string representing the concatenation of each element in L
 """
 
 
@@ -169,12 +165,100 @@ def collapse(L):
 
 
 """
+NAME: findORFs
+PARAMETERS: :param DNA :a string representing a DNA sequence 
+FUNCTION:   will identify all the ORFs in the real (un-shuffled) DNA 
+OUTPUT:  returns a list of all the ORFs it identified if none were
+         found an empty list is returned 
+"""
+
+
+def findORFs(DNA):
+    ORFL = []
+    for i in range(0,3,1):
+        currFrame = DNA[i:]
+        frame = oneFrameV2(currFrame)
+        ORFL += frame
+    return ORFL
+
+
+"""
+NAME: findORFsBothStrands
+PARAMETERS: :param DNA :a string representing a DNA sequence 
+FUNCTION:  searches both the forward and reverse complement strands for ORFs
+OUTPUT: returns a list with all the ORFs found
+"""
+
+
+def findORFsBothStrands(DNA):
+    ORFL = []
+    inSeq = findORFs(DNA)
+    complement = findORFs(reverseComplement(DNA))
+    ORFl = inSeq + complement
+    return ORFl
+
+
+"""
 NAME: 
 PARAMETERS: 
 FUNCTION: 
 OUTPUT: 
 """
 
+
+def getCoordinates(orf, DNA):
+    coordinates = []
+    #print(orf)
+    index = DNA.find(orf)
+    if index == -1:
+        reverseOrf = reverseComplement(orf)
+        index = DNA.find(reverseOrf)
+    endcoordinate = index + len(orf)
+    coordinates = [index, endcoordinate]
+    return coordinates
+
+
+"""
+NAME: 
+PARAMETERS: 
+FUNCTION: 
+OUTPUT: 
+"""
+
+
+def geneFinder(DNA, minLen):
+    ORFL = findORFsBothStrands(DNA)
+    ORFLM = []
+    listofLists = []
+    for orfl in ORFL:
+        if len(orfl)>minLen:
+            ORFLM.append(orfl)
+    for frame in ORFLM:
+        final = []
+        #print("frame: ", frame)
+        listL = getCoordinates(frame, DNA)
+        pS = codingStrandToAA(frame)
+        final = []
+        for i in listL:
+            final.append(i)
+        final.append(pS)
+        print(final)
+        listofLists.append(final)
+
+    listofLists.sort()
+    return listofLists
+
+
+"""
+NAME: 
+PARAMETERS: 
+FUNCTION: 
+OUTPUT: 
+"""
+
+def printGenes(geneList):
+    for gene in geneList:
+        print(gene)
 
 def main():
 
@@ -187,8 +271,15 @@ def main():
     dna_seq6 = "CATGAATAGGCCCA"
     dna_seq7 = "ATGCCCTAACATGAAAATGACTTAGG"
     dna_seq8 = "CTATTTCATG"
-    X73525 = loadSeq("X73525.fa")
+    dna_seq9 = "ATGGGATGAATTAACCATGCCCTAA"
+    dna_seq10 = "GGAGTAAGGGGG"
+    dna_seq11 = "ATGAAACAT" #findORFsBothStrands(dna_seq11)
+    dna_seq12 = "ACGTTCGA" #getCoordinates("GTT",dna_seq12)
+    dna_seq13 = "ACGTTCGA"#getCoordinates("CGAA",dna_seq13)
 
-    print(longestORFNoncoding(X73525, 50))
+    X73525 = loadSeq("X73525.fa")
+    min_val = longestORFNoncoding(X73525, 1500)
+    geneList = geneFinder(X73525, min_val)
+    printGenes(geneList)
 
 main()
